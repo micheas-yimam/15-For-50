@@ -6,10 +6,10 @@ import seaborn as sns
 from sklearn.model_selection import train_test_split 
 from sklearn.linear_model import LinearRegression
 from sklearn import metrics
-import xlsxwriter 
 import geoplotlib
 from geoplotlib.utils import BoundingBox
 from geoplotlib.colors import ColorMap
+from shapely.geometry import Point, Polygon
 import geopandas as gpd
 ##%matplotlib inline
 
@@ -38,10 +38,11 @@ def map(final_results):
     final_results = pd.read_excel('data.xlsx', sheet_name = 'Map')
     final_results = pd.DataFrame(final_results, columns=['State','Map','lat','long'])
     print(final_results)
-    fp = "tl_2019_us_state.shx"
+    fp = "tl_2019_us_state.shp"
     map_df = gpd.read_file(fp)
-    print(map_df)
-    merged = map_df.set_index('NAME').join(final_results.set_index('State'))
+    map_df.head()
+    print(map_df.head(1))
+    merged = map_df.set_index('state name').join(final_results.set_index('State'))
     merged.head()
     print(merged)
     # set a variable that will call whatever column we want to visualise on the map
