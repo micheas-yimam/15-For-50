@@ -29,7 +29,7 @@ def linear_reg_predict(x_train,y_train,x_test,y_test):
         for listitem in y_pred:
             filehandle.write('%s\n' % listitem)
 
-def approval_dataset(train_data,test_data):
+def model_v1_dataset(train_data,test_data):
     """ four arrays input and output variables for the regression model
     Args: 
         a training sheet from excel and a testing sheet
@@ -44,6 +44,12 @@ def approval_dataset(train_data,test_data):
     return x_train,y_train,x_test,y_test,states
 
     ### I need to figure out a way to update excel files
+def write_result(data,y_pred):
+    writer = pd.ExcelWriter(data, engine = 'xlsxwriter')
+    print(y_pred)
+    y_pred = pd.DataFrame(y_pred)
+    print(y_pred)
+    y_pred.to_excel(writer, sheet_name = 'python output')
     ### Take out the manual process of some of these steps
 
 def map(final_results):
@@ -86,10 +92,12 @@ if __name__ == "__main__":
 
     Train_data = pd.read_excel('data.xlsx', sheet_name = 'Train')
     Test_data = pd.read_excel('data.xlsx', sheet_name = 'Test')
-    approval_dataset(Train_data,Test_data)
-    x_train,y_train,x_test,y_test,states = approval_dataset(Train_data,Test_data)
+    model_v1_dataset(Train_data,Test_data)
+    x_train,y_train,x_test,y_test,states = model_v1_dataset(Train_data,Test_data)
     pred_2020 = linear_reg_predict(x_train,y_train,x_test,y_test)
     print(pred_2020)
     final_results = pd.read_excel('data.xlsx', sheet_name = 'Map')
+    path_final_result='data.xlsx'
+    write_result(path_final_result,pred_2020)
     # Doesnt work yet: map(final_results)
     #transpose_results(pred_2020)
